@@ -1,0 +1,111 @@
+package com.example.myapplicationtest;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.Application;
+import android.app.NotificationManager;
+import android.content.Intent;
+import android.location.Location;
+import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.widget.Button;
+
+import com.clevertap.android.sdk.ActivityLifecycleCallback;
+import com.clevertap.android.sdk.CleverTapAPI;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+import android.widget.EditText;
+
+import org.json.JSONArray;
+
+import java.util.HashMap;
+
+public class MainActivity extends AppCompatActivity {
+
+
+    //private Object Location;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        CleverTapAPI.setDebugLevel(CleverTapAPI.LogLevel.DEBUG);
+        CleverTapAPI cleverTapAPI = CleverTapAPI.getDefaultInstance(getApplicationContext());
+
+        //CleverTapAPI.enablePersonalization();
+        // To access a scalar-value user profile property:
+// If the property is not available, this call will return null
+        //String customerType = (String) cleverTapAPI.profile.getProperty("Customer Type");
+
+// To access a multi-value user profile property:
+// If the property is not available, this call will return null
+// To support multi-value user profile properties, cleverTap.profile.getProperty(key) returns an Object.
+        //JSONArray myStuff = (JSONArray ) cleverTapAPI.profile.getProperty("myStuff");
+        CleverTapAPI.createNotificationChannel(getApplicationContext(),"LPC","Your Channel Name",
+                "Your Channel Description", NotificationManager.IMPORTANCE_MAX,true);
+        CleverTapAPI.createNotificationChannel(getApplicationContext(),"CPL","Test",
+                "Desc", NotificationManager.IMPORTANCE_MAX,true,"firework_rocket_launch.mp3");
+        
+        cleverTapAPI.enableDeviceNetworkInfoReporting(true);
+        Location locat = cleverTapAPI.getLocation();
+// do something with location, optionally set on CleverTap for use in segmentation etc
+        cleverTapAPI.setLocation(locat); //android.location.Location
+
+        //android.location.Location location;
+        //cleverTapAPI.setLocation(location); //android.location.Location
+        ActivityLifecycleCallback.register((Application) getApplicationContext());
+        //CleverTapAPI.setDebugLevel(CleverTapAPI.LogLevel.DEBUG);
+        final CleverTapAPI clevertapDefaultInstance = CleverTapAPI.getDefaultInstance(getApplicationContext());
+
+        Button btn = (Button)findViewById(R.id.button);
+        btn.setOnClickListener(new View.OnClickListener() {
+
+            EditText name=(EditText)findViewById(R.id.editTextTextPersonName);
+            EditText email=(EditText)findViewById(R.id.editTextTextEmailAddress);
+            EditText address=(EditText)findViewById(R.id.editTextTextPostalAddress);
+            EditText username=(EditText)findViewById(R.id.editTextTextUsername);
+            EditText phone=(EditText)findViewById(R.id.editTextTextPhone);
+
+
+            @Override
+
+            public void onClick(View v) {
+                HashMap<String, Object> profileUpdate = new HashMap<String, Object>();
+                profileUpdate.put("Name", name.getText().toString());
+                profileUpdate.put("Identity", username.getText().toString());
+                profileUpdate.put("Phone","+"+phone.getText().toString());
+                profileUpdate.put("Email",email.getText().toString());
+                profileUpdate.put("Address", address.getText().toString());
+                clevertapDefaultInstance.onUserLogin(profileUpdate);
+                //clevertapDefaultInstance.pushProfile(profileUpdate);
+                clevertapDefaultInstance.pushEvent("Login Success",profileUpdate);
+                String nameString;
+                String emailString;
+                String addressString;
+                String usernameString;
+                String phoneString;
+                nameString = name.getText().toString();
+                emailString = email.getText().toString();
+                addressString = address.getText().toString();
+                usernameString = username.getText().toString();
+                phoneString = phone.getText().toString();
+                // Displaying simple Toast message
+                Toast.makeText(getApplicationContext(),
+                        "Details Entered Successfully!"+" "+ nameString+" "+ emailString+" "+ addressString+" "+ usernameString+" "
+                                + phoneString,
+                        Toast.LENGTH_LONG)
+                        .show();
+                openActivity2();
+            }
+        });
+    }
+            public void openActivity2(){
+                Intent intent= new Intent(this, MainActivity2.class);
+                startActivity(intent);
+            }
+
+
+
+}
