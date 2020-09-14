@@ -1,0 +1,42 @@
+package com.example.myapplicationtest;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.clevertap.android.sdk.CleverTapAPI;
+
+import java.util.HashMap;
+
+public class MainActivity4 extends AppCompatActivity implements View.OnClickListener{
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main4);
+        final CleverTapAPI clevertapDefaultInstance = CleverTapAPI.getDefaultInstance(getApplicationContext());
+        Button btn = (Button)findViewById(R.id.button9);
+        btn.setOnClickListener(new View.OnClickListener() {
+
+            EditText address = (EditText) findViewById(R.id.editTextTextEmailAddress2);
+
+
+            @Override
+            public void onClick(View view) {
+                HashMap<String, Object> profileUpdate = new HashMap<String, Object>();
+                profileUpdate.put("Address",address.getText().toString());
+                clevertapDefaultInstance.pushProfile(profileUpdate);
+
+            }
+
+        });
+    }
+
+    @Override
+    public void onClick(View view) {
+
+    }
+}
