@@ -1,0 +1,65 @@
+package com.example.myapplicationtest;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
+import com.clevertap.android.sdk.CleverTapAPI;
+
+import java.util.HashMap;
+
+public class MainActivity5 extends AppCompatActivity implements View.OnClickListener {
+    private Button v, btn11, btn12, btn13, btn14;
+    private CleverTapAPI cleverTapDefaultInstance;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main5);
+
+        cleverTapDefaultInstance = CleverTapAPI.getDefaultInstance(getApplicationContext());
+
+        btn11 = (Button) findViewById(R.id.button11);
+        btn12 = (Button) findViewById(R.id.button12);
+        btn13 = (Button) findViewById(R.id.button13);
+        btn14 = (Button) findViewById(R.id.button14);
+
+        btn11.setOnClickListener((View.OnClickListener) this);
+        btn12.setOnClickListener((View.OnClickListener) this);
+        btn13.setOnClickListener((View.OnClickListener) this);
+        btn14.setOnClickListener((View.OnClickListener) this);
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        HashMap<String, Object> profileUpdate= new HashMap<String, Object>();
+        if (v == btn11) {
+            //HashMap<String, Object> profileUpdate= new HashMap<String, Object>();
+            profileUpdate.put("MSG-push", true);
+            //cleverTapDefaultInstance.pushProfile(profileUpdate);
+
+        } else if (v == btn12) {
+            //HashMap<String, Object> profileUpdate = new HashMap<String, Object>();
+            profileUpdate.put("MSG-push", false);
+            //cleverTapDefaultInstance.pushProfile(profileUpdate);
+
+        } else if (v == btn13) {
+            //HashMap<String, Object> profileUpdate = new HashMap<String, Object>();
+            profileUpdate.put("MSG-email", true);
+            //cleverTapDefaultInstance.pushProfile(profileUpdate);
+
+        } else if (v == btn14) {
+            //HashMap<String, Object> profileUpdate= new HashMap<String, Object>();
+            profileUpdate.put("MSG-email", false);
+            //cleverTapDefaultInstance.pushProfile(profileUpdate);      // Disable email notifications
+
+
+        }
+        cleverTapDefaultInstance.pushProfile(profileUpdate);
+    }
+}
+
+
